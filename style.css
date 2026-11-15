@@ -640,3 +640,18 @@ main > section:nth-child(3) { animation-delay: .04s; }
         gap: .8rem;
     }
 }
+
+
+/* Mohammad AI input visibility fix */
+#chatInput {
+    color: #f4fbf7 !important;
+    -webkit-text-fill-color: #f4fbf7 !important;
+    caret-color: #34d399 !important;
+    opacity: 1 !important;
+    background-color: #05100c !important;
+}
+
+#chatInput::placeholder {
+    color: #9db5a8 !important;
+    -webkit-text-fill-color: #9db5a8 !important;
+}
