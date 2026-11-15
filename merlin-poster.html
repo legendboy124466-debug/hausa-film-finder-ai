@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ha">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <script src="/server-config.js" defer></script>
+
+    <title>MERLIN SEASON 1</title>
+
+    <style>
+        body {
+            background: #05070d;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .poster {
+            max-width: 600px;
+            margin: auto;
+            background: #182b35;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .merlin-image {
+    display: block;
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    object-fit: contain;
+    margin: 0 auto;
+    border-radius: 12px;
+    border: 2px solid gold;
+}
+        }
+
+        h2 {
+            color: gold;
+            font-size: 30px;
+            margin-top: 25px;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        h3 {
+            color: #00ff88;
+        }
+
+        .episodes button {
+            margin: 6px;
+            padding: 12px 20px;
+            background: #00ff88;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .episodes button:hover {
+            background: gold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="poster">
+
+        <!-- MERLIN SEASON 1 POSTER -->
+        <img
+            class="merlin-image"
+            alt="Merlin Season 1 Poster"
+        >
+
+        <h2>MERLIN SEASON 1</h2>
+
+        <p>Sunan Hausa: Merlin</p>
+
+        <p>Studio: Algaita Dub Studio</p>
+
+        <p>Asali: Amurka • 2009</p>
+
+        <h3>Jerin Kashi</h3>
+
+        <div class="episodes">
+
+            <button onclick="openEpisode(1)">Kashi 1</button>
+            <button onclick="openEpisode(2)">Kashi 2</button>
+            <button onclick="openEpisode(3)">Kashi 3</button>
+            <button onclick="openEpisode(4)">Kashi 4</button>
+            <button onclick="openEpisode(5)">Kashi 5</button>
+            <button onclick="openEpisode(6)">Kashi 6</button>
+            <button onclick="openEpisode(7)">Kashi 7</button>
+            <button onclick="openEpisode(8)">Kashi 8</button>
+            <button onclick="openEpisode(9)">Kashi 9</button>
+            <button onclick="openEpisode(10)">Kashi 10</button>
+
+        </div>
+
+    </div>
+
+    <script>
+        document.querySelector(".merlin-image").src = window.hfApiUrl("/legacy-merlin-poster");
+
+        function openEpisode(number) {
+            alert("Ka zaɓi Merlin Kashi na " + number);
+        }
+    </script>
+
+</body>
+</html>

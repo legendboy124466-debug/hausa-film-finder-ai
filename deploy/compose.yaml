@@ -1,0 +1,110 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    init: true
+    restart: unless-stopped
+    environment:
+      PORT: "3000"
+      NODE_ENV: production
+      DATABASE_PATH: /var/lib/hausa-film-finder/database/hausa-film-finder.sqlite
+      MOVIE_UPLOAD_DIR: /var/lib/hausa-film-finder/media/movies
+      POSTER_UPLOAD_DIR: /var/lib/hausa-film-finder/media/posters
+      MERLIN_UPLOAD_DIR: /var/lib/hausa-film-finder/media/merlin
+      MERLIN_MOVIE_UPLOAD_DIR: /var/lib/hausa-film-finder/media/movies/merlin
+      SOCIAL_UPLOAD_DIR: /var/lib/hausa-film-finder/media/social
+      SAMPLE_UPLOAD_DIR: /tmp/hf-processing/samples
+      TMPDIR: /tmp/hf-processing
+      FFMPEG_PATH: /usr/bin/ffmpeg
+      FFPROBE_PATH: /usr/bin/ffprobe
+      FPCALC_PATH: /usr/bin/fpcalc
+      TRUST_PROXY: 10.254.240.2
+      MOHAMMAD_AI_BASE_URL: ${MOHAMMAD_AI_BASE_URL:-http://127.0.0.1:11434}
+      MOHAMMAD_AI_MODEL: ${MOHAMMAD_AI_MODEL:-}
+      FINGERPRINT_MAX_CONCURRENT_JOBS: "1"
+      MAX_UPLOAD_BYTES: "32212254720"
+      CAPACITOR_APP_ORIGINS: https://localhost
+      ADMIN_USERNAME_FILE: /run/secrets/admin_username
+      ADMIN_PASSWORD_FILE: /run/secrets/admin_password
+      SESSION_SECRET_FILE: /run/secrets/session_secret
+    secrets:
+      - admin_username
+      - admin_password
+      - session_secret
+    volumes:
+      - type: bind
+        source: ${HF_DATABASE_HOST_PATH:?Set HF_DATABASE_HOST_PATH to the mounted persistent database volume}
+        target: /var/lib/hausa-film-finder/database
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${HF_MEDIA_HOST_PATH:?Set HF_MEDIA_HOST_PATH to the mounted persistent media volume}
+        target: /var/lib/hausa-film-finder/media
+        bind:
+          create_host_path: false
+    tmpfs:
+      - /tmp/hf-processing:rw,nosuid,nodev,noexec,size=1073741824,mode=1777
+    mem_limit: 6g
+    cpus: 4.0
+    networks:
+      app_proxy:
+        ipv4_address: 10.254.240.3
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
+
+  https_proxy:
+    image: caddy:2.10-alpine
+    profiles: [public]
+    restart: unless-stopped
+    environment:
+      PUBLIC_HOST: ${PUBLIC_HOST:?Set PUBLIC_HOST to your domain before enabling public access}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - type: bind
+        source: ./Caddyfile
+        target: /etc/caddy/Caddyfile
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${HF_CADDY_DATA_HOST_PATH:?Set HF_CADDY_DATA_HOST_PATH to persistent storage}
+        target: /data
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${HF_CADDY_CONFIG_HOST_PATH:?Set HF_CADDY_CONFIG_HOST_PATH to persistent storage}
+        target: /config
+        bind:
+          create_host_path: false
+    depends_on:
+      app:
+        condition: service_healthy
+    networks:
+      app_proxy:
+        ipv4_address: 10.254.240.2
+
+secrets:
+  admin_username:
+    environment: HF_ADMIN_USERNAME_SECRET
+  admin_password:
+    environment: HF_ADMIN_PASSWORD_SECRET
+  session_secret:
+    environment: HF_SESSION_SECRET
+
+networks:
+  app_proxy:
+    ipam:
+      config:
+        - subnet: 10.254.240.0/24

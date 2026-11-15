@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="ha">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#06140f">
+    <meta name="application-name" content="HAUSA FILM FINDER AI">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="HAUSA FILM FINDER AI">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Nemo fina-finan Hausa da sauran fina-finai, ko ka gane fim daga hoto, sauti, ko ɗan gajeren bidiyo.">
+    <title>HAUSA FILM FINDER AI</title>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/app-icon-512.png">
+    <link rel="stylesheet" href="style.css">
+    <script src="server-config.js" defer></script>
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="#home" aria-label="HAUSA FILM FINDER AI — gida">
+            <span class="brand-mark" aria-hidden="true">HF</span>
+            <span>HAUSA FILM FINDER AI</span>
+        </a>
+        <nav aria-label="Babban menu">
+            <a href="#home">Gida</a>
+            <a href="#movies">Bincika</a>
+            <a href="#history">Tarihi</a>
+            <a href="#mohammad">Mohammad AI</a>
+            <a href="#profile" data-auth-nav hidden>Profile</a>
+            <a href="#community" data-auth-nav hidden>Al'umma</a>
+            <a href="#chat" data-auth-nav hidden>Hira</a>
+        </nav>
+        <div class="header-links">
+            <a class="admin-link" href="/admin/admin.html">Gudanarwa</a>
+            <a id="headerAccountLink" href="#accountArea">Shiga</a>
+            <details id="serverSettings" class="server-settings">
+                <summary>Server</summary>
+                <form id="serverSettingsForm" class="server-settings-form">
+<label for="backendUrl">URL na backend (HTTP domin ƙarfafa makonci/LAN, HTTPS domin cikin cikin)
+                        <input id="backendUrl" name="backendUrl" type="url" inputmode="url"
+                            autocomplete="url" placeholder="http://192.168.1.42:3178" required>
+                    </label>
+                    <div class="server-settings-actions">
+                        <button type="submit">Ajiye URL</button>
+                        <button id="testServerButton" type="button" class="secondary-button">Gwada haɗi</button>
+                    </div>
+                    <p id="serverSettingsStatus" class="status-message" role="status" aria-live="polite"></p>
+                </form>
+            </details>
+        </div>
+    </header>
+
+    <main>
+        <section id="accountArea" class="account-area" aria-labelledby="accountTitle">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">AL'UMMAR HAUSA FILM FINDER</p>
+                    <h2 id="accountTitle">Shiga ko buɗe asusu</h2>
+                </div>
+                <p>Asusun masu kallo, profile da tattaunawa suna cikin tsari mai tsaro na app.</p>
+            </div>
+<div id="authForms" class="auth-forms">
+                <form id="loginForm" class="social-form">
+                    <h3>Shiga</h3>
+                    <label>Lambar waya
+                        <input name="phoneNumber" type="tel" autocomplete="tel" placeholder="+234 801 234 5678" required>
+                    </label>
+                    <label>Kalmar sirri
+                        <div class="password-field">
+                            <input name="password" type="password" autocomplete="current-password" required>
+                            <button type="button" class="toggle-password" aria-label="Nuna ko cire kalmar sirri">
+                                <svg class="eye-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                <svg class="eye-closed" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72 1.06a3 3 0 1 1 4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                            </button>
+                        </div>
+                    </label>
+                    <button type="submit">Shiga asusu</button>
+                    <p id="loginStatus" class="status-message" role="status"></p>
+                </form>
+                <form id="registerForm" class="social-form">
+                    <h3>Buɗe sabon asusu</h3>
+                    <label>Cikakken suna
+                        <input name="fullName" autocomplete="name" maxlength="100" required>
+                    </label>
+                    <label>Lambar waya
+                        <input name="phoneNumber" type="tel" autocomplete="tel" placeholder="+234 801 234 5678" required>
+                        <span class="form-hint">Yi amfani da lambar Najeriya: +234 801 234 5678 ko 080 1234 5678</span>
+                    </label>
+                    <label>Kalmar sirri (aƙalla haruffa 6)
+                        <div class="password-field">
+                            <input name="password" type="password" autocomplete="new-password" minlength="6" maxlength="256" required>
+                            <button type="button" class="toggle-password" aria-label="Nuna ko cire kalmar sirri">
+                                <svg class="eye-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                <svg class="eye-closed" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72 1.06a3 3 0 1 1 4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                            </button>
+                        </div>
+                    </label>
+                    <label>Tabbatar da kalmar sirri
+                        <div class="password-field">
+                            <input name="confirmPassword" type="password" autocomplete="new-password" minlength="6" maxlength="256" required>
+                            <button type="button" class="toggle-password" aria-label="Nuna ko cire kalmar sirri">
+                                <svg class="eye-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                <svg class="eye-closed" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72 1.06a3 3 0 1 1 4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                            </button>
+                        </div>
+                    </label>
+                    <button type="submit">Ƙirƙiri asusu</button>
+                    <p id="registerStatus" class="status-message" role="status"></p>
+                </form>
+            </div>
+            <div id="sessionInfo" class="session-info" hidden>
+                <p id="sessionGreeting"></p>
+                <button id="logoutButton" class="secondary-button" type="button">Fita daga asusu</button>
+            </div>
+        </section>
+
+        <section id="home" class="hero">
+            <div class="hero-copy">
+                <p class="eyebrow">FIM MAI KYAU DA HAUSA</p>
+                <h1>Gano fim ɗinka.<br><span>Cikin sauri da salo.</span></h1>
+                <p class="hero-description">Nemo fina-finan Hausa da na duniya ta suna, ko ka gano fim daga hoto, sauti, ko ɗan gajeren bidiyo — duk a cikin ƙwarewar zamani.</p>
+                <div class="welcome-voice" aria-label="Muryar maraba da Hausa">
+                    <div class="welcome-voice-buttons">
+                        <button id="replayWelcome" class="welcome-voice-button" type="button" aria-label="Sake sauraron muryar maraba" title="Sake sauraron muryar maraba">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="M11 5 6 9H3v6h3l5 4V5Z"></path>
+                                <path d="M15.5 8.5a5 5 0 0 1 0 7"></path>
+                                <path d="M18.5 5.5a9 9 0 0 1 0 13"></path>
+                            </svg>
+                            <span>Saurari maraba</span>
+                        </button>
+                        <button id="toggleWelcomeMute" class="welcome-voice-button secondary" type="button" aria-label="Kashe sautin maraba" aria-pressed="false" title="Kashe ko kunna sautin maraba">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="M11 5 6 9H3v6h3l5 4V5Z"></path>
+                                <path class="mute-mark" d="m16 9 5 6m0-6-5 6"></path>
+                                <path class="unmute-mark" d="M16 9a4 4 0 0 1 0 6"></path>
+                            </svg>
+                            <span id="welcomeMuteLabel">Kashe sauti</span>
+                        </button>
+                    </div>
+                    <p id="welcomeVoiceStatus" class="welcome-voice-status" role="status" aria-live="polite"></p>
+                    <audio id="welcomeRecording" preload="none" playsinline src="/assets/hausa-welcome.mp3"></audio>
+                </div>
+                <a class="primary-link" href="#identify">Gano fim yanzu <span aria-hidden="true">↓</span></a>
+                <p class="hero-tagline">Gano Fim ɗinka Cikin Sauƙi.</p>
+            </div>
+            <div class="hero-art" aria-hidden="true">
+                <div class="reel reel-one"></div>
+                <div class="reel reel-two"></div>
+                <div class="hero-caption">LABARI · AL'ADA · NISHADI</div>
+            </div>
+        </section>
+
+        <section class="promo-section" aria-labelledby="promo-title">
+            <div class="promo-copy">
+                <p class="eyebrow">HAUSA FILM FINDER AI</p>
+                <h2 id="promo-title">Kwarewa mai kyau, sakamako mai sauri.</h2>
+                <p>Bincika fina-finai, gano su daga media, kuma yi hira da Mohammad AI — tare da ƙirar da ta dace da waya, tablet da kwamfuta.</p>
+                <a class="primary-link" href="#movies">Fara nema <span aria-hidden="true">→</span></a>
+            </div>
+            <figure class="promo-figure">
+                <img
+                    class="promo-poster"
+                    src="/assets/hausa-film-finder-promotional-poster.png"
+                    alt="Poster na HAUSA FILM FINDER AI mai nuna fasalolin neman fina-finai"
+                    width="768"
+                    height="824"
+                    fetchpriority="high">
+                <figcaption>HAUSA FILM FINDER AI · Gano Fim ɗinka Cikin Sauƙi.</figcaption>
+            </figure>
+        </section>
+
+        <section class="search-section" aria-labelledby="search-title">
+            <div>
+                <p class="eyebrow">BINCIKEN FINA-FINAI</p>
+                <h2 id="search-title">Wane fim kake nema?</h2>
+            </div>
+            <form id="searchForm" class="search-form">
+                <label class="sr-only" for="searchInput">Sunan fim ko studio</label>
+                <input id="searchInput" name="q" type="search" placeholder="Rubuta sunan fim, sunan Hausa, ko studio..." autocomplete="off">
+                <button type="submit">Nema</button>
+            </form>
+            <p id="catalogStatus" class="status-message" role="status">Ana haɗuwa da kundin fina-finai…</p>
+        </section>
+
+        <section id="identify" class="identify-section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">SMART IDENTIFICATION</p>
+                    <h2>Gano fim daga hoto, sauti ko bidiyo</h2>
+                </div>
+                <p>Za a kwatanta samfurinka da fingerprints na fina-finan da aka ba da izinin sarrafawa.</p>
+            </div>
+            <div class="identify-grid">
+                <form class="identify-card" data-kind="image">
+                    <span class="identify-icon" aria-hidden="true">▧</span>
+                    <h3>Hoto ko screenshot</h3>
+                    <p>Zaɓi hoto ko ɗauki shi da camera domin kwatanta shi da kundin.</p>
+                    <label class="file-picker">Zaɓi hoto
+                        <input name="sample" type="file" accept="image/jpeg,image/png,image/webp,image/bmp" required>
+                    </label>
+                    <button type="button" class="secondary-button" data-take-photo>Ɗauki hoto da camera</button>
+                    <p class="capture-status" data-capture-status="image" aria-live="polite"></p>
+                    <button type="submit">Gano daga hoto</button>
+                </form>
+                <form class="identify-card" data-kind="audio">
+                    <span class="identify-icon" aria-hidden="true">♫</span>
+                    <h3>Samfurin sauti</h3>
+                    <p>Yi amfani da fayil ko rikodin sauti domin nemo fim ɗin da ya dace.</p>
+                    <label class="file-picker">Zaɓi sauti
+                        <input name="sample" type="file" accept="audio/*,.m4a,.flac,.opus,.webm" required>
+                    </label>
+                    <button type="button" class="secondary-button" data-record-media="audio">Yi rikodin sauti na sakan 20</button>
+                    <p class="capture-status" data-capture-status="audio" aria-live="polite"></p>
+                    <button type="submit">Gano daga sauti</button>
+                </form>
+                <form class="identify-card" data-kind="video">
+                    <span class="identify-icon" aria-hidden="true">▶</span>
+                    <h3>Ɗan gajeren bidiyo</h3>
+                    <p>Tura ko yi rikodin gajeren clip (har zuwa minti biyu) don ganowa.</p>
+                    <label class="file-picker">Zaɓi bidiyo
+                        <input name="sample" type="file" accept="video/*,.mkv,.mp4,.mov,.webm" required>
+                    </label>
+                    <button type="button" class="secondary-button" data-record-media="video">Yi rikodin bidiyo na sakan 20</button>
+                    <p class="capture-status" data-capture-status="video" aria-live="polite"></p>
+                    <button type="submit">Gano daga bidiyo</button>
+                </form>
+            </div>
+            <div id="identificationResult" class="identification-result" aria-live="polite"></div>
+            <p class="media-note">Ana karɓar abubuwan da kake da izinin amfani da su kawai. Ba a adana samfuran nema a matsayin bayanan dindindin ba.</p>
+        </section>
+
+        <dialog id="cameraDialog" class="camera-dialog" aria-labelledby="cameraDialogTitle">
+            <h2 id="cameraDialogTitle">Ɗauki hoto</h2>
+            <video id="cameraPreview" autoplay playsinline muted></video>
+            <p id="cameraDialogStatus" class="capture-status" aria-live="polite"></p>
+            <div class="camera-dialog-actions">
+                <button id="takePhotoButton" type="button">Ɗauki hoto</button>
+                <button id="closeCameraButton" type="button" class="secondary-button">Rufe camera</button>
+            </div>
+        </dialog>
+
+        <section id="movieDetailSection" class="movie-detail-section" hidden aria-labelledby="movieDetailTitle">
+            <button id="backToMoviesButton" class="secondary-button" type="button">← Komawa Movies</button>
+            <div class="movie-detail-layout">
+                <img id="movieDetailPoster" class="movie-detail-poster" alt="">
+                <div class="movie-detail-copy">
+                    <p id="movieDetailStatus" class="movie-status" role="status"></p>
+                    <h2 id="movieDetailTitle"></h2>
+                    <p id="movieDetailMeta"></p>
+                    <p id="movieDetailEpisode"></p>
+                    <p id="movieDetailDescription"></p>
+                    <button id="playMovieButton" class="movie-play-button" type="button" disabled>PLAY</button>
+                    <p id="moviePlaybackStatus" class="status-message" role="status"></p>
+                    <video id="movieVideoPlayer" controls playsinline preload="metadata" hidden></video>
+                </div>
+            </div>
+        </section>
+
+        <section class="catalog-section" id="movies">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">KUNDIN FINA-FINAI</p>
+                    <h2>Gano abin kallo</h2>
+                </div>
+                <div id="categoryFilters" class="category-filters" aria-label="Tace bisa rukuni"></div>
+            </div>
+            <div id="moviesContainer" class="movie-grid" aria-live="polite"></div>
+        </section>
+
+        <section id="history" class="history-section" aria-labelledby="historyTitle">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">AIYUKANKA</p>
+                    <h2 id="historyTitle">Tarihi</h2>
+                </div>
+                <p>Tarihin bincike da ganowa a wannan na'ura. (Ana sabunta shi yayin da kake amfani da app.)</p>
+            </div>
+            <div class="history-list" aria-live="polite">
+                <div class="history-item">
+                    <div>
+                        <strong>Binciken kundin fina-finai</strong>
+                        <p>Yi amfani da sashen Nemo don ganin fina-finai da sakamakon bincike.</p>
+                    </div>
+                    <span class="history-tag">Search</span>
+                </div>
+                <div class="history-item">
+                    <div>
+                        <strong>Ganowa daga hoto, sauti ko bidiyo</strong>
+                        <p>Sakamakon ganowa yana bayyana nan take a sashen Smart Identification.</p>
+                    </div>
+                    <span class="history-tag">Identify</span>
+                </div>
+                <div class="history-item">
+                    <div>
+                        <strong>Fina-finan da ka buɗe</strong>
+                        <p>Danna katin fim don duba cikakken bayani da kunna shi idan akwai.</p>
+                    </div>
+                    <span class="history-tag">Recent</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="merlinCollection" class="merlin-section" aria-labelledby="merlinTitle">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">TARIN MUSAMMAN</p>
+                    <h2 id="merlinTitle">Merlin Season 1</h2>
+                </div>
+                <p>Jerin episodes goma na Merlin. Za a kunna bidiyon da aka ɗora kai tsaye.</p>
+            </div>
+            <div id="merlinEpisodes" class="merlin-grid" aria-live="polite"></div>
+            <p id="merlinStatus" class="status-message" role="status"></p>
+        </section>
+
+        <section id="mohammad" class="assistant-section" aria-labelledby="mohammadTitle">
+            <div class="assistant-intro">
+                <p class="eyebrow">MOHAMMAD AI</p>
+                <h2 id="mohammadTitle">Mohammad AI</h2>
+                <p>Mataimaki kan fina-finai da bayanan app. Yana amsa da Hausa sai ka nemi Turanci, bisa bayanan da ke cikin app.</p>
+                <div class="assistant-avatar" aria-hidden="true"><span>MA</span></div>
+                <p id="mohammadModelStatus" class="assistant-status" role="status" aria-live="polite">Ana duba matsayin AI…</p>
+                <div class="assistant-voice-controls" aria-label="Yanayin murya da avatar">
+                    <button class="secondary-button" type="button" disabled title="Ba a kunna ba">Makirufo — ba a kunna ba</button>
+                    <button class="secondary-button" type="button" disabled title="Ba a kunna ba">Sauti — ba a kunna ba</button>
+                </div>
+                <p class="assistant-limitation">Hira ta rubutu ce a halin yanzu. Shiga asusunka don fara amfani.</p>
+            </div>
+            <div class="assistant-panel">
+                <div id="chatMessages" class="chat-messages" aria-live="polite" aria-relevant="additions text">
+                    <p class="chat-message">Mohammad AI yana amfani da bayanan da ke cikin kundin app. Shiga asusunka domin fara hira.</p>
+                </div>
+                <form id="assistantForm" class="assistant-form">
+                    <label class="sr-only" for="chatInput">Tambaya ga Mohammad AI</label>
+                    <input id="chatInput" name="message" maxlength="2000" autocomplete="off"
+                        placeholder="Shiga asusunka kafin ka rubuta..." required disabled>
+                    <button id="assistantSendButton" type="submit" disabled>Aika</button>
+                </form>
+                <p id="assistantRequestStatus" class="assistant-request-status" role="status" aria-live="polite"></p>
+            </div>
+        </section>
+
+        <section id="community" class="social-section" data-auth-section hidden>
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">AL'UMMA</p>
+                    <h2>Al'umma</h2>
+                </div>
+                <a class="primary-link" href="#create-post">Rubuta sabon post</a>
+            </div>
+            <div class="community-tools">
+                <div class="feed-tabs" role="group" aria-label="Nau'in feed">
+                    <button type="button" data-feed-scope="discover" aria-pressed="true">Sabbi</button>
+                    <button type="button" data-feed-scope="following" aria-pressed="false">Mutanen da nake bi</button>
+                    <button type="button" data-feed-scope="popular" aria-pressed="false">Mashahurai</button>
+                </div>
+                <form id="peopleSearchForm" class="inline-search">
+                    <label class="sr-only" for="peopleSearchInput">Nemo mutane</label>
+                    <input id="peopleSearchInput" name="q" placeholder="Nemo mutane da username ko suna..." maxlength="60">
+                    <button type="submit">Nema</button>
+                </form>
+            </div>
+            <div id="peopleResults" class="people-list" aria-live="polite"></div>
+            <div id="feedPosts" class="feed-list" aria-live="polite"></div>
+        </section>
+
+        <section id="create-post" class="social-section alt-section" data-auth-section hidden>
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">RABA RA'AYINKA</p>
+                    <h2>Ƙirƙiri post ko review</h2>
+                </div>
+                <p>Za ka iya rubutu, haɗa fim daga kundin da aka amince da shi, ko saka hoto.</p>
+            </div>
+            <form id="postForm" class="social-form">
+                <label>Rubutunka
+                    <textarea name="content" maxlength="2000" rows="4" placeholder="Me kake tunani game da fim ɗin?"></textarea>
+                </label>
+                <div class="form-grid">
+                    <label>Fim/poster daga kundin
+                        <select name="movieId"><option value="">Ba zan haɗa fim ba</option></select>
+                    </label>
+                    <label>Hanyar fim da studio ya amince da ita (HTTPS)
+                        <input name="authorizedLink" type="url" maxlength="2048" placeholder="https://...">
+                    </label>
+                    <label>Hoto ko fayil da aka amince da shi
+                        <input name="attachment" type="file" accept="image/jpeg,image/png,image/webp,application/pdf">
+                    </label>
+                </div>
+                <button type="submit">Buga post</button>
+                <p id="postStatus" class="status-message" role="status"></p>
+            </form>
+        </section>
+
+        <section id="chat" class="social-section" data-auth-section hidden>
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">TATTAUNAWA</p>
+                    <h2>Hira da ƙungiyoyi</h2>
+                </div>
+                <p>Saƙonnin sirri da na ƙungiya suna cikin wannan sashe.</p>
+            </div>
+            <div class="chat-layout">
+                <aside class="chat-sidebar">
+                    <form id="chatSearchForm" class="inline-search">
+                        <label class="sr-only" for="chatSearchInput">Nemo mutumin da za a yi hira da shi</label>
+                        <input id="chatSearchInput" name="q" placeholder="Nemo mai amfani..." maxlength="60">
+                        <button type="submit">Nema</button>
+                    </form>
+                    <div id="chatPeopleResults" class="people-list"></div>
+                    <h3>Saƙonnin kai tsaye</h3>
+                    <div id="conversationList" class="conversation-list"></div>
+                    <h3>Ƙungiyoyin fim</h3>
+                    <form id="groupForm" class="compact-form">
+                        <label>Sunan sabuwar ƙungiya
+                            <input name="name" maxlength="80" required>
+                        </label>
+                        <label>Bayani
+                            <input name="description" maxlength="500">
+                        </label>
+                        <button type="submit">Ƙirƙiri ƙungiya</button>
+                    </form>
+                    <div id="groupList" class="conversation-list"></div>
+                </aside>
+                <div class="chat-panel">
+                    <div id="chatHeader" class="chat-header">Zaɓi mutum ko ƙungiya domin fara hira.</div>
+                    <div id="socialChatMessages" class="social-messages" aria-live="polite"></div>
+                    <form id="messageForm" class="message-form" hidden>
+                        <label class="sr-only" for="messageInput">Rubuta saƙo</label>
+                        <textarea id="messageInput" name="content" maxlength="3000" rows="2" placeholder="Rubuta saƙonka..."></textarea>
+                        <div class="form-grid">
+                            <label>Poster/fim
+                                <select name="movieId"><option value="">Ba zan haɗa fim ba</option></select>
+                            </label>
+                            <label>Hanyar fim da aka amince da ita
+                                <input name="authorizedLink" type="url" maxlength="2048" placeholder="https://...">
+                            </label>
+                            <label>Hoto, sauti ko PDF
+                                <input id="messageAttachment" name="attachment" type="file" accept="image/jpeg,image/png,image/webp,audio/webm,audio/ogg,audio/mpeg,audio/wav,audio/mp4,application/pdf">
+                            </label>
+                        </div>
+                        <div class="message-actions">
+                            <button id="recordVoiceButton" class="secondary-button" type="button">● Ƙara saƙon murya</button>
+                            <button type="submit">Aika saƙo</button>
+                            <button id="cancelReplyButton" class="secondary-button" type="button" hidden>Soke amsa</button>
+                        </div>
+                        <p id="messageStatus" class="status-message" role="status"></p>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="notifications" class="social-section alt-section" data-auth-section hidden>
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">SANARWA</p>
+                    <h2>Sanarwa</h2>
+                </div>
+                <button id="markNotificationsRead" class="secondary-button" type="button">Alama duka an karanta</button>
+            </div>
+            <div id="notificationList" class="notification-list" aria-live="polite"></div>
+        </section>
+
+        <section id="profile" class="social-section" data-auth-section hidden>
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">PROFILE</p>
+                    <h2>Asusunka da saituna</h2>
+                </div>
+                <div id="profileCounts" class="profile-counts"></div>
+            </div>
+            <form id="profileForm" class="social-form">
+                <div id="profileCard" class="profile-card"></div>
+                <label>Cikakken suna
+                    <input name="fullName" maxlength="100" required>
+                </label>
+                <label>Takaitaccen bayani (haruffa 280)
+                    <textarea name="bio" maxlength="280" rows="3"></textarea>
+                </label>
+                <label>Hoton profile
+                    <input name="photo" type="file" accept="image/jpeg,image/png,image/webp">
+                </label>
+                <label class="check-row"><input name="isPrivate" type="checkbox"> Asusuna na zaman kansa ne</label>
+                <label>Wa zai iya aiko maka da saƙo?
+                    <select name="messagePolicy">
+                        <option value="everyone">Kowa</option>
+                        <option value="following">Mutanen da nake bi</option>
+                        <option value="requests">Buƙatar saƙo kafin amsa</option>
+                    </select>
+                </label>
+                <button type="submit">Ajiye saitunan profile</button>
+                <p id="profileStatus" class="status-message" role="status"></p>
+            </form>
+            <div id="publicProfile" class="public-profile"></div>
+            <div class="profile-columns">
+                <div>
+                    <h3>Movies da na fi so</h3>
+                    <div id="favoriteMovies" class="people-list"></div>
+                </div>
+                <div>
+                    <h3>Studios da nake bi</h3>
+                    <div id="studioList" class="people-list"></div>
+                </div>
+                <div>
+                    <h3>Masu bin ni / waɗanda nake bi</h3>
+                    <div class="message-actions">
+                        <button id="showFollowers" class="secondary-button" type="button">Masu bin ni</button>
+                        <button id="showFollowing" class="secondary-button" type="button">Waɗanda nake bi</button>
+                    </div>
+                    <div id="connectionList" class="people-list"></div>
+                </div>
+                <div>
+                    <h3>Asusun da na toshe</h3>
+                    <div id="blockedUsers" class="people-list"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <dialog id="reviewDialog" class="review-dialog">
+        <form id="reviewForm" class="social-form">
+            <h2>Rubuta nazarin fim</h2>
+            <input name="movieId" type="hidden">
+            <label>Ƙima daga 1 zuwa 5
+                <select name="rating" required>
+                    <option value="5">5 — Madalla</option>
+                    <option value="4">4 — Kyau sosai</option>
+                    <option value="3">3 — Matsakaici</option>
+                    <option value="2">2 — Bai yi kyau ba</option>
+                    <option value="1">1 — Bai burge ni ba</option>
+                </select>
+            </label>
+            <label>Sharhi
+                <textarea name="body" maxlength="2000" rows="4"></textarea>
+            </label>
+            <div class="message-actions">
+                <button type="submit">Aika review</button>
+                <button id="closeReviewDialog" class="secondary-button" type="button">Rufe</button>
+            </div>
+            <p id="reviewStatus" class="status-message" role="status"></p>
+        </form>
+    </dialog>
+
+    <dialog id="merlinPlayerDialog" class="merlin-player-dialog" aria-labelledby="merlinPlayerTitle">
+        <div class="merlin-player-content">
+            <div class="merlin-player-heading">
+                <h2 id="merlinPlayerTitle">Merlin</h2>
+                <button id="closeMerlinPlayer" class="secondary-button" type="button">Rufe mai kunnawa</button>
+            </div>
+            <video id="merlinVideoPlayer" controls playsinline preload="metadata"></video>
+            <p id="merlinPlayerStatus" class="status-message" role="status"></p>
+        </div>
+    </dialog>
+
+    <nav class="bottom-nav" aria-label="Kewayawa ta ƙasa">
+        <a href="#home" aria-label="Gida"><span aria-hidden="true">⌂</span><span>Gida</span></a>
+        <a href="#movies" aria-label="Bincika"><span aria-hidden="true">⌕</span><span>Bincika</span></a>
+        <a href="#history" aria-label="Tarihi"><span aria-hidden="true">◷</span><span>Tarihi</span></a>
+        <a href="#mohammad" aria-label="Mohammad AI"><span aria-hidden="true">✦</span><span>Mohammad AI</span></a>
+        <a href="#community" aria-label="Al'umma"><span aria-hidden="true">◉</span><span>Al'umma</span></a>
+    </nav>
+
+    <footer class="site-footer">
+        <a class="brand" href="#home"><span class="brand-mark" aria-hidden="true">HF</span><span>HAUSA FILM FINDER AI</span></a>
+        <p>© 2026 HAUSA FILM FINDER AI · Gano Fim ɗinka Cikin Sauƙi.</p>
+    </footer>
+    <script src="social.js" defer></script>
+</body>
+</html>

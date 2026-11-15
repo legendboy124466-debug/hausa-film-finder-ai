@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ha">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#11131a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="HAUSA FILM FINDER AI">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>HAUSA FILM FINDER AI</title>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/app-icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/app-icon-512.png">
+    <link rel="stylesheet" href="/admin/admin.css">
+    <script src="/server-config.js" defer></script>
+</head>
+<body>
+    <!-- Language Selection Panel (shown on first launch) -->
+    <section id="languagePanel" class="panel language-panel">
+        <p class="eyebrow">SELECT YOUR LANGUAGE</p>
+        <h1>WELCOME TO HAUSA FILM FINDER</h1>
+        <p>Choose your preferred language.</p>
+        <div class="lang-options">
+            <button class="lang-btn english" data-lang="en" aria-label="English">English</button>
+            <button class="lang-btn hausa" data-lang="ha" aria-label="Hausa">Hausa</button>
+            <button class="lang-btn arabic" data-lang="ar" aria-label="Arabic">Arabic</button>
+            <button class="lang-btn hindi" data-lang="hi" aria-label="Hindi">Hindi</button>
+            <button class="lang-btn urdu" data-lang="ur" aria-label="Urdu">Urdu</button>
+            <button class="lang-btn yoruba" data-lang="yo" aria-label="Yoruba">Yoruba</button>
+            <button class="lang-btn igbo" data-lang="ig" aria-label="Igbo">Igbo</button>
+            <button class="lang-btn french" data-lang="fr" aria-label="French">French</button>
+            <button class="lang-btn spanish" data-lang="es" aria-label="Spanish">Spanish</button>
+            <button class="lang-btn portuguese" data-lang="pt" aria-label="Portuguese">Portuguese</button>
+            <button class="lang-btn other" data-lang="other" aria-label="Other">Other...</button>
+        </div>
+        <button id="continueButton" class="primary">Continue</button>
+        <p id="panelMessage" class="message" role="status"></p>
+    </section>
+
+    <header class="admin-header">
+        <a href="/" class="brand">HAUSA FILM FINDER AI</a>
+        <div class="admin-header-actions">
+            <details id="serverSettings" class="server-settings">
+                <summary>Haɗin server</summary>
+                <form id="serverSettingsForm" class="server-settings-form">
+                    <label for="backendUrl">HTTPS URL na backend
+                        <input id="backendUrl" name="backendUrl" type="url" inputmode="url"
+                            autocomplete="url" placeholder="https://server.example.com" required>
+                    </label>
+                    <div class="server-settings-actions">
+                        <button type="submit">Ajiye URL</button>
+                        <button id="testServerButton" type="button" class="secondary">Gwada haɗi</button>
+                    </div>
+                    <p id="serverSettingsStatus" class="message" role="status" aria-live="polite"></p>
+                </form>
+            </details>
+            <a href="/">Komawa shafin farko</a>
+        </div>
+    </header>
+    <main class="admin-shell">
+        <section id="loginPanel" class="panel">
+            <p class="eyebrow">YANKIN MASU GUDANARWA</p>
+            <h1>Shiga dashboard</h1>
+            <form id="loginForm">
+                <label for="username">Sunan mai amfani</label>
+                <input id="username" name="username" autocomplete="username" required>
+                <label for="password">Kalmar sirri</label>
+                <input id="password" name="password" type="password" autocomplete="current-password" required>
+                <button type="submit">Shiga</button>
+                <p id="loginMessage" class="message" role="status"></p>
+            </form>
+        </section>
+
+        <section id="dashboardPanel" hidden>
+            <div class="dashboard-title">
+                <div>
+                    <p class="eyebrow">GUDANAR DA BAYANAN FINA-FINAI</p>
+                    <h1>FULL MOVIE FINGERPRINT ENGINE</h1>
+                    <p>Ana sarrafa cikakken fim a backend, kashi-kashi. Ana buƙatar izinin amfani da fim ɗin.</p>
+                </div>
+                <button id="logoutButton" class="secondary" type="button">Fita</button>
+            </div>
+
+            <section id="ownerAgentPanel" class="panel" aria-labelledby="ownerAgentTitle">
+                <div class="jobs-heading">
+                    <div>
+                        <p class="eyebrow">MATAIMAKIN MAI SHI · READ-ONLY TA TSOHO</p>
+                        <h2 id="ownerAgentTitle">HAUSA FILM FINDER AI AGENT</h2>
+                        <p class="notice">Mai gudanarwa da ya shiga ne kawai zai iya amfani da waɗannan bincike. Ba sa canza ko share bayanai; ba sa gudanar da umarnin shell.</p>
+                    </div>
+                    <button id="refreshOwnerAgentButton" class="secondary" type="button">Sabunta rahoto</button>
+                </div>
+                <p id="ownerAgentStatus" class="message" role="status" aria-live="polite">Ana duba matsayin Agent…</p>
+                <div id="ownerAgentSummary" class="owner-agent-summary" aria-live="polite"></div>
+                <h3>Binciken da aka amince da su</h3>
+                <div class="owner-agent-actions">
+                    <button type="button" data-agent-task="health-check">Lafiyar app</button>
+                    <button type="button" data-agent-task="database-integrity">Ingancin database</button>
+                    <button type="button" data-agent-task="application-routes">Hanyoyin app</button>
+                    <button type="button" data-agent-task="media-tools">FFmpeg / fpcalc</button>
+                    <button type="button" data-agent-task="fingerprint-status">Matsayin fingerprints</button>
+                    <button type="button" data-agent-task="merlin-status">Merlin episodes</button>
+                    <button type="button" data-agent-task="activity-report">Rahoton ƙidaya</button>
+                </div>
+                <pre id="ownerAgentResult" class="owner-agent-result" aria-live="polite">Zaɓi binciken read-only domin ganin sakamakonsa.</pre>
+                <div class="jobs-heading">
+                    <h3>Tarihin Agent</h3>
+                    <button id="refreshOwnerAgentHistoryButton" class="secondary" type="button">Sabunta tarihi</button>
+                </div>
+                <div id="ownerAgentHistory" aria-live="polite"></div>
+            </section>
+
+            <form id="movieForm" class="panel" enctype="multipart/form-data">
+                <div class="form-grid">
+                    <label>Fayil ɗin fim da aka ba da izini
+                        <input id="movieFile" name="movie" type="file" accept="video/*,.mkv,.mp4,.mov,.webm" required>
+                    </label>
+                    <label>Poster (na daban)
+                        <input id="posterFile" name="poster" type="file" accept="image/jpeg,image/png,image/webp">
+                    </label>
+                    <label>Asalin suna
+                        <input id="title" name="title" maxlength="200" required>
+                    </label>
+                    <label>Sunan Hausa
+                        <input id="hausaTitle" name="hausaTitle" maxlength="200">
+                    </label>
+                    <label>Harshe
+                        <input id="language" name="language" maxlength="100" placeholder="Hausa, Turanci">
+                    </label>
+                    <label>Jarumai (raba da waƙafi)
+                        <input id="actors" name="actors" maxlength="1200" placeholder="Sunan jarumi, sunan jaruma">
+                    </label>
+                    <label>Studio mai dubbing
+                        <select id="studio" name="studio" required>
+                            <option value="">Zaɓi studio</option>
+                        </select>
+                    </label>
+                    <label>Shekarar fitarwa
+                        <input id="year" name="year" type="number" min="1888" max="2100">
+                    </label>
+                    <label>Season (idan fim ne mai jerin sassa)
+                        <input id="seasonNumber" name="seasonNumber" type="number" min="1" max="999">
+                    </label>
+                    <label>Episode (idan ya dace)
+                        <input id="episodeNumber" name="episodeNumber" type="number" min="1" max="999">
+                    </label>
+                    <label>Ƙasar asali
+                        <input id="country" name="country" maxlength="100">
+                    </label>
+                    <label>Kashi na fim (raba da waƙafi)
+                        <input id="categories" name="categories" maxlength="300" placeholder="Drama, Adventure">
+                    </label>
+                    <label class="wide-field">Bayani
+                        <textarea id="description" name="description" maxlength="5000" rows="4"></textarea>
+                    </label>
+                </div>
+                <p class="notice">Domin Chrome, MP4 mai H.264/AAC ya fi dacewa. AVI, MKV da MOV za a mayar da su MP4 yayin kunna su; ana buƙatar FFmpeg.</p>
+                <p class="notice">Tsarin zai yi amfani da FFmpeg da Chromaprint. Ba za a nuna gane fim a matsayin nasara ba sai an samar da ainihin fingerprints.</p>
+                <label class="permission-check">
+                    <input id="permissionConfirmed" name="permissionConfirmed" type="checkbox" value="true" required>
+                    Na tabbatar cewa ina da izinin amfani da sarrafa wannan fim da poster.
+                </label>
+                <button id="processButton" type="submit">Ajiye fim kuma fara sarrafawa</button>
+                <p id="formMessage" class="message" role="status"></p>
+            </form>
+
+            <form id="movieBulkForm" class="panel">
+                <h2>Bulk Upload na fina-finai</h2>
+                <p class="notice">Zaɓi bidiyo da yawa. Sunan kowane fayil zai zama taken farko; za ka iya gyara sauran bayanai bayan upload. Ana turawa ɗaya bayan ɗaya don nuna ci gaba da kuskuren kowane fayil.</p>
+                <label>Bidiyoyi
+                    <input id="movieBulkFiles" type="file" accept="video/*,.mkv,.mp4,.mov,.webm,.avi,.m4v,.mpg,.mpeg" multiple required>
+                </label>
+                <div class="form-grid">
+                    <label>Dubbing studio
+                        <input id="movieBulkStudio" value="Algaita Dub Studio" maxlength="200" required>
+                    </label>
+                    <label>Harshe
+                        <input id="movieBulkLanguage" value="Hausa" maxlength="100">
+                    </label>
+                    <label>Shekara
+                        <input id="movieBulkYear" type="number" min="1888" max="2100">
+                    </label>
+                    <label>Ƙasar asali
+                        <input id="movieBulkCountry" maxlength="100">
+                    </label>
+                    <label>Jarumai iri ɗaya (raba da waƙafi)
+                        <input id="movieBulkActors" maxlength="1200">
+                    </label>
+                </div>
+                <label class="permission-check">
+                    <input id="movieBulkPermission" type="checkbox" required>
+                    Na tabbatar ina da izinin sarrafa dukkan bidiyoyin da na zaɓa.
+                </label>
+                <button id="movieBulkUploadButton" type="submit">Loda fina-finai da aka zaɓa</button>
+                <progress id="movieBulkProgress" max="100" value="0" hidden></progress>
+                <div id="movieBulkStatus" class="message" role="status" aria-live="polite"></div>
+            </form>
+
+            <section id="merlinManagement" class="panel">
+                <div class="jobs-heading">
+                    <div>
+                        <h2>Tarin Merlin — episodes 10</h2>
+                        <p class="notice">Loda episodes ɗaya bayan ɗaya, ko zaɓi fayiloli da sunayensu ke ɗauke da lambar episode, misali Merlin 01.mp4. Domin iPhone/Safari, MP4 mai H.264 da AAC shi ne mafi dacewa; wasu codecs na MKV, AVI ko WebM ba za su kunna ba.</p>
+                    </div>
+                    <button id="refreshMerlinButton" class="secondary" type="button">Sabunta slots</button>
+                </div>
+                <form id="merlinMovieBulkForm" class="merlin-movie-upload-form">
+                    <h3>Movie Upload and Automatic Fingerprinting</h3>
+                    <p class="notice">Zaɓi episodes da yawa daga Desktop ko wani babban fayil. Ana ɗora su ɗaya bayan ɗaya zuwa <code>uploads/movies/merlin/</code>; kowane bidiyo yana samun movie record da fingerprint job dabam.</p>
+                    <input id="merlinMovieFiles" type="file" accept="video/*,.mkv,.mp4,.mov,.webm,.avi,.m4v,.mpg,.mpeg" multiple hidden>
+                    <button id="selectMerlinMoviesButton" type="button">SELECT MOVIES</button>
+                    <p id="selectedMerlinMovieNames" class="message" aria-live="polite">Ba a zaɓi bidiyo ba tukuna.</p>
+                    <div class="merlin-movie-metadata">
+                        <label for="merlinMovieStudio">Dubbing studio
+                            <input id="merlinMovieStudio" value="Algaita Dub Studio" maxlength="200" required>
+                        </label>
+                        <label for="merlinMovieYear">Shekarar fitarwa (zaɓi ne)
+                            <input id="merlinMovieYear" type="number" min="1888" max="2100" inputmode="numeric">
+                        </label>
+                        <label for="merlinMovieLanguage">Harshe
+                            <input id="merlinMovieLanguage" value="Hausa" maxlength="100">
+                        </label>
+                        <label for="merlinMovieActors">Jarumai (raba da waƙafi)
+                            <input id="merlinMovieActors" maxlength="1200">
+                        </label>
+                    </div>
+                    <label class="permission-check">
+                        <input id="merlinMoviePermission" type="checkbox" required>
+                        Na tabbatar cewa ina da izinin amfani da sarrafa kowane bidiyon da aka zaɓa.
+                    </label>
+                    <button id="merlinMovieUploadButton" type="submit">Loda kuma saka a fingerprint queue</button>
+                    <label class="progress-label" for="merlinMovieUploadProgress">Ci gaban lodawa</label>
+                    <progress id="merlinMovieUploadProgress" max="100" value="0" hidden></progress>
+                    <p id="merlinMovieBulkStatus" class="message" role="status" aria-live="polite"></p>
+                    <div id="merlinMovieQueue" class="merlin-movie-queue" aria-live="polite"></div>
+                </form>
+                <form id="merlinBulkForm" class="merlin-bulk-form">
+                    <label>Bulk upload na bidiyo
+                        <input id="merlinBulkFiles" type="file" accept="video/*,.mkv,.mp4,.mov,.webm" multiple>
+                    </label>
+                    <button id="merlinBulkButton" type="submit">Loda fayilolin da aka zaɓa</button>
+                    <progress id="merlinBulkProgress" max="100" value="0" hidden></progress>
+                    <p id="merlinBulkStatus" class="message" role="status"></p>
+                </form>
+                <div id="merlinSlots" class="merlin-admin-grid" aria-live="polite"></div>
+            </section>
+
+            <section class="panel">
+                <h2>Studio Management</h2>
+                <form id="studioForm" class="form-grid">
+                    <label>Sunan studio
+                        <input id="studioName" name="name" maxlength="200" required>
+                    </label>
+                    <label>Matsayin izini
+                        <select id="studioPermissionStatus" name="permissionStatus" required>
+                            <option value="unverified">Ba a tantance ba</option>
+                            <option value="pending">Ana jira</option>
+                            <option value="verified">An tabbatar</option>
+                            <option value="not-authorized">Ba a ba da izini ba</option>
+                        </select>
+                    </label>
+                    <label class="wide-field">Hanyoyin da aka ba da izini (ɗaya a kowane layi)
+                        <textarea id="studioLinks" name="authorizedLinks" rows="3"></textarea>
+                    </label>
+                    <button type="submit">Yi rijistar studio</button>
+                </form>
+                <p id="studioMessage" class="message" role="status"></p>
+            </section>
+
+            <section class="panel">
+                <div class="jobs-heading">
+                    <h2>Rijistar fina-finai da izini</h2>
+                    <button id="refreshMoviesButton" class="secondary" type="button">Sabunta</button>
+                </div>
+                <p class="notice">Tsoffin bayanai an shigo da su ba tare da amincewar izini ba. Tabbatar da haƙƙin amfani kafin a nuna su ga jama'a.</p>
+                <div id="adminMoviesList"></div>
+            </section>
+
+            <section class="panel">
+                <div class="jobs-heading">
+                    <h2>Ci gaban sarrafawa</h2>
+                    <button id="refreshJobsButton" class="secondary" type="button">Sabunta</button>
+                </div>
+                <div id="jobsList" aria-live="polite"></div>
+            </section>
+
+            <section class="panel">
+                <div class="jobs-heading">
+                    <h2>Rahotannin al'umma</h2>
+                    <button id="refreshReportsButton" class="secondary" type="button">Sabunta rahotanni</button>
+                </div>
+                <p class="notice">Masu gudanarwa ne kawai za su iya duba rahotanni ko cire abun da bai dace ba.</p>
+                <div id="socialReportsList" aria-live="polite"></div>
+            </section>
+
+            <section class="panel">
+                <div class="jobs-heading">
+                    <h2>Asusun al'umma</h2>
+                    <button id="refreshSocialUsersButton" class="secondary" type="button">Sabunta asusu</button>
+                </div>
+                <div id="socialUsersList" aria-live="polite"></div>
+            </section>
+        </section>
+    </main>
+    <script src="/admin/merlin-episode.js" defer></script>
+    <script src="/admin/admin.js" defer></script>
+</body>
+</html>

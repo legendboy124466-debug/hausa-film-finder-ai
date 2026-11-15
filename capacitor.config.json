@@ -1,0 +1,16 @@
+{
+  "appId": "com.hausa.filmsfinder",
+  "appName": "Hausa Film Finder AI",
+  "webDir": "www",
+  "plugins": {
+    "Network": {
+      "enabled": true
+    },
+    "SecureStorage": {
+      "enabled": true
+    },
+    "Filesystem": {
+      "enabled": true
+    }
+  }
+}

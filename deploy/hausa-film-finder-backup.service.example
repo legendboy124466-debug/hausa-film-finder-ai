@@ -1,0 +1,15 @@
+[Unit]
+Description=Consistent HAUSA FILM FINDER AI database and media backup
+Requires=docker.service
+After=docker.service local-fs.target
+
+[Service]
+Type=oneshot
+User=hf-backup
+SupplementaryGroups=docker
+EnvironmentFile=/etc/hausa-film-finder/backup.env
+WorkingDirectory=/opt/hausa-film-finder
+ExecStart=/bin/bash /opt/hausa-film-finder/scripts/backup-vps.sh
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true

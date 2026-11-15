@@ -1,0 +1,25 @@
+{
+  "movies": [
+    {
+      "id": 1,
+      "title": "Merlin",
+      "hausaTitle": "Malin",
+      "studio": "Algaita Dub Studio",
+      "country": "Amurka",
+      "year": 2009,
+      "sceneFolder": "scene-images/merlin",
+      "scenes": [
+        "scene-images/merlin/scene1.jpg",
+        "scene-images/merlin/scene2.jpg",
+        "scene-images/merlin/scene3.jpg",
+        "scene-images/merlin/scene4.jpg",
+        "scene-images/merlin/scene5.jpg",
+        "scene-images/merlin/scene6.jpg",
+        "scene-images/merlin/scene7.jpg",
+        "scene-images/merlin/scene8.jpg",
+        "scene-images/merlin/scene9.jpg",
+        "scene-images/merlin/scene10.jpg"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+[Unit]
+Description=Run the HAUSA FILM FINDER AI backup daily
+
+[Timer]
+OnCalendar=*-*-* 03:30:00
+Persistent=true
+RandomizedDelaySec=10m
+Unit=hausa-film-finder-backup.service
+
+[Install]
+WantedBy=timers.target
