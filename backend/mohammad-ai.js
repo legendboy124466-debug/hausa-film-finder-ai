@@ -748,7 +748,19 @@ function createMohammadAiRoutes(app, {
     app.get("/api/mohammad-ai/status", async (request, response) => {
         const local = await checkLocalModel();
         const openai = await checkOpenAIModel();
-        const gemini = await checkGeminiModel();
+        const geminiConfig = getGeminiConfiguration();
+        const gemini = {
+            configured: geminiConfig.configured,
+            runtimeAvailable: false,
+            modelAvailable: false,
+            provider: "gemini",
+            model: geminiConfig.model,
+            error: geminiConfig.configured
+                ? "not-checked"
+                : geminiConfig.error === "missing-key"
+                    ? "missing-api-key"
+                    : "model"
+        };
         const anyConfigured = local.configured || openai.configured || gemini.configured;
         const anyAvailable = local.modelAvailable || openai.modelAvailable || gemini.modelAvailable;
 
@@ -822,16 +834,6 @@ function createMohammadAiRoutes(app, {
                     error: "BA A ZAɓI AI PROVIDER BA. Ka ɗora GEMINI_API_KEY ko OPENAI_API_KEY a cikin .env ko sakaina Ollama local."
                 });
                 return;
-            }
-
-            if (useGemini) {
-                const geminiStatus = await checkGeminiModel();
-                if (!geminiStatus.modelAvailable) {
-                    response.status(503).json({
-                        error: "Ba a samu model ɗin da aka zaɓa a cikin Gemini. Ka tabbatar da GEMINI_MODEL da API key."
-                    });
-                    return;
-                }
             }
 
             if (useLocal) {
